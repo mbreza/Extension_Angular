@@ -1,5 +1,4 @@
 <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
-
     <div class="form-group">
       <label for="username">Username</label>
       <input
@@ -7,6 +6,10 @@
         id="username"
         formControlName="username"
         class="form-control">
+        <span *ngIf="!createForm.get('username').valid && createForm.get('username').touched"
+          class="help-block">
+          Enter username.
+        </span>
     </div>
 
     <div class="form-group">
@@ -16,6 +19,10 @@
         id="email"
         formControlName="email"
         class="form-control">
+        <span *ngIf="!createForm.get('email').valid && createForm.get('email').touched"
+          class="help-block">
+          Enter email.
+        </span>
     </div>
 
     <div class="form-group">
@@ -25,15 +32,24 @@
           id="password"
           formControlName="password"
           class="form-control">
+          <span *ngIf="!createForm.get('password').valid && createForm.get('password').touched"
+            class="help-block">
+            Enter min 8 lenght pass.
+          </span>
       </div>
 
       <div class="form-group">
         <label for="confirmPassword">Confirm password</label>
         <input
+          class="form-control"
           type="password"
           id="confirmPassword"
           formControlName="confirmPassword"
-          class="form-control">
+          >
+          <span *ngIf="!createForm.get('confirmPassword').valid && createForm.get('confirmPassword').touched"
+            class="help-block">
+            Enter matching password.
+          </span>
       </div>
 
     <button class="btn btn-primary" type="submit">Create</button>

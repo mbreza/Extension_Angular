@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { browser } from "webextension-polyfill-ts";
+import { User } from '../user.model';
 
 @Component({
   selector: 'app-popup',
@@ -8,19 +9,20 @@ import { browser } from "webextension-polyfill-ts";
 })
 export class PopupComponent implements OnInit {
 
-  asdf: String = "fioletowy"
+  asdf: String = "ASDF";
 
   constructor() { }
 
   ngOnInit() {
-    console.log('popup');
-
-    var storageItem = browser.storage.sync.get('kolor');
-    storageItem.then((res) => {
-      if(res.kolor !== undefined){
-        this.asdf = res.kolor;
+    browser.storage.local.get('userList').then((res) => {
+      if(res.userList !== undefined){
+        var users = res.userList
+        console.log(users);
+        console.log(users.length);
+        users.forEach((user: User) => {
+          console.log(user.username);
+        });
       }
-
     })
   }
 

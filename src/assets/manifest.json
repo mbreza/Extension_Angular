@@ -33,7 +33,8 @@
     ],
   
     "options_ui": {
-      "page": "/index.html?page=options"
+      "page": "/index.html?page=options",
+      "open_in_tab": true
     },  
     "permissions": [
         "storage",
