@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { browser } from "webextension-polyfill-ts";
-import { User } from '../user.model';
+import { User } from '../shared/user.model';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-popup',
@@ -9,21 +10,33 @@ import { User } from '../user.model';
 })
 export class PopupComponent implements OnInit {
 
-  asdf: String = "ASDF";
+  logInForm: FormGroup;
 
   constructor() { }
 
   ngOnInit() {
-    browser.storage.local.get('userList').then((res) => {
-      if(res.userList !== undefined){
-        var users = res.userList
-        console.log(users);
-        console.log(users.length);
-        users.forEach((user: User) => {
-          console.log(user.username);
-        });
-      }
-    })
+    this.logInForm = new FormGroup({
+      'username': new FormControl(null, [Validators.required]),
+      'password': new FormControl(null, [Validators.required]),
+      'checkbox': new FormControl(null)
+    });
+
+    // browser.storage.local.get('userList').then((res) => {
+    //   if(res.userList !== undefined){
+    //     var users = res.userList
+    //     console.log(users);
+    //     console.log(users.length);
+    //     users.forEach((user: User) => {
+    //       console.log(user.username);
+    //     });
+    //   }
+    // })
   }
 
+  onSubmit(){
+    browser.runtime.sendMessage("Moja wiadomosc").then((response) => {
+      console.log(response);
+  });
+
+  }
 }

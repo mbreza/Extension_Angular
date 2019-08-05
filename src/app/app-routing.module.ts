@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { OptionsComponent } from './options/options.component';
 import { BackgroundComponent } from './background/background.component';
 import { AppComponent } from './app.component';
-import { RouteGuard } from './route.guard';
+import { RouteGuard } from './shared/route.guard';
 import { PopupComponent } from './popup/popup.component';
 
 const routes: Routes = [

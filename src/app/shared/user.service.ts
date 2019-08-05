@@ -18,7 +18,7 @@ export class UserService {
       passphrase: password
     };
     this.openpgp.generateKey(options).then((key) => {
-      browser.storage.local.get('userList').then((res) => {
+      browser.storage.local.get({ 'userList': [] }).then((res) => {
         var user = new User(
           username,
           email,
@@ -27,31 +27,27 @@ export class UserService {
           key.publicKeyArmored,
           key.revocationCertificate);
 
-        if (res.userList === undefined) {
-          browser.storage.local.set({ userList: [user] });
-        } else {
-          res.userList.push(user);
-          browser.storage.local.set({ userList: res.userList });
-        }
+        res.userList.push(user);
+        browser.storage.local.set({ userList: res.userList });
       })
     })
   }
 
   signIn(username: string, password: string) {
-    browser.storage.local.get('userList').then((res) => {
+    browser.storage.local.get({ 'userList': [] }).then((res) => {
       var users = res.userList;
-      users.some((user) => {
-        if (user.name === username && user.password === password) {
+      users.some((user: User) => {
+        if (user.username === username && user.password === password) {
           browser.storage.local.set({
             singedIn: new User(
-              user.name,
-              user.email,
+              user.username,
+              user.emailaddress,
               null,
-              user.privateKeyArmored,
-              user.publicKeyArmored,
+              user.privateKey,
+              user.publicKey,
               user.revocationCertificate)
           });
-          return;
+          return true;
         }
       })
     })

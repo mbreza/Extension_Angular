@@ -6,9 +6,9 @@
         id="username"
         formControlName="username"
         class="form-control">
-        <span *ngIf="!createForm.get('username').valid && createForm.get('username').touched"
+        <span *ngIf="createForm.get('username').invalid && createForm.get('username').touched"
           class="help-block">
-          Enter username.
+            Field is empty or username exists.
         </span>
     </div>
 
@@ -21,7 +21,7 @@
         class="form-control">
         <span *ngIf="!createForm.get('email').valid && createForm.get('email').touched"
           class="help-block">
-          Enter email.
+          Field does not match email pattern or email exists.
         </span>
     </div>
 
@@ -34,7 +34,7 @@
           class="form-control">
           <span *ngIf="!createForm.get('password').valid && createForm.get('password').touched"
             class="help-block">
-            Enter min 8 lenght pass.
+            Field must contain at least 8 characters.
           </span>
       </div>
 
@@ -48,9 +48,9 @@
           >
           <span *ngIf="!createForm.get('confirmPassword').valid && createForm.get('confirmPassword').touched"
             class="help-block">
-            Enter matching password.
+            Field must match password.
           </span>
       </div>
 
-    <button class="btn btn-primary" type="submit">Create</button>
+    <button class="btn btn-primary" type="submit">Sign Up</button>
   </form>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../user.service';
+import { UserService } from '../shared/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ValidatorService } from '../shared/validator.service';
 
 @Component({
   selector: 'app-options',
@@ -11,48 +12,36 @@ export class OptionsComponent implements OnInit {
 
   createForm: FormGroup;
 
-  constructor(private userService : UserService) { }
+  constructor(
+    private userService: UserService,
+    private validatorService: ValidatorService) { }
 
   ngOnInit() {
     this.createForm = new FormGroup({
-      'username': new FormControl(null, [Validators.required]),
-      'email': new FormControl(null, [Validators.required, Validators.email]),
+      'username': new FormControl(null, [Validators.required], [this.validatorService.checkExists("username")]),
+      'email': new FormControl(null, [Validators.required, Validators.email], [this.validatorService.checkExists("email")]),
       'password': new FormControl(null, [Validators.required, Validators.minLength(8)]),
       'confirmPassword': new FormControl(null, [Validators.required])
     },
-      this.checkPasswords
+      this.validatorService.mustMatch
     );
   }
 
   onSubmit() {
     console.log('cos sie dzieje')
-    if (this.createForm.invalid) {
-      return;
+    if (this.createForm.valid) {
+      console.log(this.createForm);
+      this.userService.signUp(
+        this.createForm.controls.username.value,
+        this.createForm.controls.email.value,
+        this.createForm.controls.password.value);
+      this.createForm.reset();
     }
-    console.log(this.createForm);
-    this.userService.signUp(
-      this.createForm.controls.username.value,
-      this.createForm.controls.email.value,
-      this.createForm.controls.password.value);
-    // this.userService.signUp(
-    //   this.createForm.controls.username.value,
-    //   this.createForm.controls.email.value,
-    //   this.createForm.controls.password.value);
+
+
   }
 
   onReset() {
     this.createForm.reset();
-  }
-
-  checkPasswords(createForm: FormGroup) {
-    let pass = createForm.controls.password.value;
-    let confirmPassword = createForm.controls.confirmPassword.value;
-
-    if (pass !== confirmPassword && createForm.get('confirmPassword').touched) {
-      createForm.controls['confirmPassword'].setErrors({ 'incorrect': true });
-      return { notSame: true };
-    } else {
-      return null;
-    }
   }
 }
