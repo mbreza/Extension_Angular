@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { browser } from "webextension-polyfill-ts";
+import { User } from '../shared/user.model';
+import { UserService } from '../shared/user.service';
 
 @Component({
   selector: 'app-background',
@@ -8,32 +10,35 @@ import { browser } from "webextension-polyfill-ts";
 })
 export class BackgroundComponent implements OnInit {
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
-    console.log('background');
-
     browser.runtime.onMessage.addListener((message) => {
       return new Promise((resolve, reject) => {
-        resolve(" XD "+ message);
+        if (message.type === 'signIn') {
+          sessionStorage.setItem('currentUser', JSON.stringify(message.currentUser));
+        } else if (message.type === 'currentSignIn') {
+            browser.storage.local.get(['currentUser', 'signInType']).then((res) => {
+              if(res.signInType === "permanentlySignedIn"){
+                resolve({
+                  signInType: "permanentlySignedIn",
+                  currentUser: res.currentUser
+                });
+              } else if(res.signInType === "temporarilySignedIn"){
+                resolve({
+                  signInType: "temporarilySignedIn",
+                  currentUser: JSON.parse(sessionStorage.getItem("currentUser"))
+                });
+              } else {
+                resolve({ signInType: "notSignedIn" });
+              }
+            });
+        } else if (message.type === 'signOut') {
+          sessionStorage.removeItem("currentUser");
+        } else {
+          resolve("Nie rozumiem.");
+        }
       })
-    }); 
-
-
-
-  //   browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  //     if (request.type == "Login") {
-  //         let user = new User(request.name, null, null,
-  //             request.privkey, request.publicKey, null);
-  
-  //         sessionStorage.setItem("currentUser", JSON.stringify(user));
-  //     } else if (request.type == "send") {
-  //         console.log("response");
-  //         sendResponse({ currentUser: sessionStorage.getItem("currentUser") });
-  //     } else if (request.type == "Logout"){
-  //         sessionStorage.removeItem("currentUser");
-  //     }
-  // });
+    });
   }
-
 }

@@ -37,8 +37,6 @@ export class OptionsComponent implements OnInit {
         this.createForm.controls.password.value);
       this.createForm.reset();
     }
-
-
   }
 
   onReset() {

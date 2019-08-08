@@ -27,7 +27,7 @@
   
     "content_scripts":[
       {
-          "matches": ["file:///D:/vs_workspace/text.html"],
+          "matches": ["file:///D:/vs_workspace/text2.html"],
           "js": ["content.js"]
       }
     ],

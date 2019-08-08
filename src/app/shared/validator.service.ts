@@ -15,7 +15,7 @@ export class ValidatorService {
     let pass = createForm.controls.password.value;
     let confirmPassword = createForm.controls.confirmPassword.value;
 
-    if (pass !== confirmPassword && createForm.get('confirmPassword').touched) {
+    if (pass !== confirmPassword) {
       createForm.controls['confirmPassword'].setErrors({ 'mustMatch': true });
       return { notSame: true };
     } else {
