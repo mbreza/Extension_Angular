@@ -28,7 +28,12 @@
     "content_scripts":[
       {
           "matches": ["file:///D:/vs_workspace/text2.html"],
-          "js": ["content.js"]
+          "js": [
+            "browser-polyfill.min.js",
+            "jquery-3.3.1.min.js",
+            "openpgp.min.js",
+            "content.js"
+          ]
       }
     ],
   

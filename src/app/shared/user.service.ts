@@ -67,4 +67,25 @@ export class UserService {
       })
     })
   }
+
+  generateMessage(message: String): Promise<any>{
+    return browser.storage.local.get(['userList', 'currentUser']).then((res) => {
+      return new Promise(async (resolve) => {
+        if(res.currentUser !== undefined){
+          const privKeyObj = (await this.openpgp.key.readArmored(res.currentUser.privateKey)).keys[0]
+          await privKeyObj.decrypt(res.currentUser.password); 
+          const options = {
+              message: this.openpgp.message.fromText(message),       
+              publicKeys: (await this.openpgp.key.readArmored(res.currentUser.publicKey)).keys,
+              privateKeys: [privKeyObj] 
+          }
+          this.openpgp.encrypt(options).then(ciphertext => {
+            resolve(ciphertext.data);
+          })
+        } else {
+          resolve('Not logged in!');
+        }
+      })   
+    })
+  }
 }
