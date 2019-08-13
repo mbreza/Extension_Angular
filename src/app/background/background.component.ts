@@ -11,6 +11,13 @@ export class BackgroundComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   ngOnInit() {
+    browser.runtime.onStartup.addListener(() => {
+      browser.storage.local.get(['signInType']).then((res) =>{
+        if(res.signInType === 'temporarilySignedIn'){
+          browser.storage.local.set({ signInType: "notSignedIn" });
+        }
+      });
+  });
 
     browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message.type === 'signIn') {
