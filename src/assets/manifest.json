@@ -6,10 +6,9 @@
 
     "browser_specific_settings": {
       "gecko": {
-        "id": "addon@example.com"
+        "id": "test3@example.com"
       }
     },
-    
 
     "icons": {
       "128": "128.png"
@@ -29,9 +28,8 @@
       {
           "matches": ["file:///D:/vs_workspace/text2.html"],
           "js": [
-            "browser-polyfill.min.js",
             "jquery-3.3.1.min.js",
-            "openpgp.min.js",
+            "browser-polyfill.min.js",
             "content.js"
           ]
       }
@@ -46,6 +44,6 @@
         "notifications",
         "contextMenus",
         "tabs",
-        "file:///home/mbreza/vs-workspace/text.html"
+        "file:///D:/vs_workspace/text2.html"
     ]
 }
