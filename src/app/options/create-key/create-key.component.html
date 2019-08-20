@@ -1,0 +1,43 @@
+<form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input type="text" id="username" formControlName="username" class="form-control">
+    <span *ngIf="createForm.get('username').invalid && createForm.get('username').touched" class="help-block">
+      Field is empty or username exists.
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="text" id="email" formControlName="email" class="form-control">
+    <span *ngIf="!createForm.get('email').valid && createForm.get('email').touched" class="help-block">
+      Field does not match email pattern or email exists.
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" id="password" formControlName="password" class="form-control">
+    <span *ngIf="!createForm.get('password').valid && createForm.get('password').touched" class="help-block">
+      Field must contain at least 8 characters.
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="confirmPassword">Confirm password</label>
+    <input class="form-control" type="password" id="confirmPassword" formControlName="confirmPassword">
+    <span *ngIf="!createForm.get('confirmPassword').valid && createForm.get('confirmPassword').touched"
+      class="help-block">
+      Field must match password.
+    </span>
+  </div>
+
+  <div class="form-group">
+    <div [className]="creating ? 'progress' : 'progress invisible'" id="progressBar">
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75"
+        aria-valuemin="0" aria-valuemax="100" style="width: 100%">Creating key..</div>
+    </div>
+  </div>
+
+  <button class="form-control btn btn-primary" type="submit">Create key</button>
+</form>

@@ -1,0 +1,101 @@
+<form [formGroup]="importForm" (ngSubmit)="importKey()">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" formControlName="username" class="form-control">
+        <span *ngIf="importForm.get('username').invalid && importForm.get('username').touched" class="help-block">
+            Field is empty or username exists.
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" id="email" formControlName="email" class="form-control">
+        <span *ngIf="!importForm.get('email').valid && importForm.get('email').touched" class="help-block">
+            Field does not match email pattern or email exists.
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" formControlName="password" class="form-control">
+        <span *ngIf="!importForm.get('password').valid && importForm.get('password').touched" class="help-block">
+            Field must contain at least 8 characters.
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label for="confirmPassword">Confirm password</label>
+        <input class="form-control" type="password" id="confirmPassword" formControlName="confirmPassword">
+        <span *ngIf="!importForm.get('confirmPassword').valid && importForm.get('confirmPassword').touched"
+            class="help-block">
+            Field must match password.
+        </span>
+    </div>
+
+
+    <div class="form-group">
+        <label for="publicKey">Public key</label>
+        <div class="custom-file">
+            <input
+                (change)="onFileChange($event, 0)"
+                type="file"
+                id="publicKey"
+                formControlName="publicKey"
+                class="form-control custom-file-input">
+            <label
+                #publicKey
+                class="custom-file-label"
+                for="publicKey">Choose file</label>
+        </div>
+        <span *ngIf="!importForm.get('publicKey').valid && importForm.get('publicKey').touched" class="help-block">
+            Public key must be provided.
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label for="privateKey">Private key</label>
+        <div class="custom-file">
+            <input 
+                (change)="onFileChange($event, 1)"
+                type="file"
+                id="privateKey"
+                formControlName="privateKey"
+                class="form-control custom-file-input">
+            <label
+                #privateKey
+                class="custom-file-label"
+                for="privateKey">Choose file</label>
+        </div>
+        <span *ngIf="!importForm.get('privateKey').valid && importForm.get('privateKey').touched" class="help-block">
+            Private key must be provided.
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label for="revocationCertificate">Revocation certificate</label>
+        <div class="custom-file">
+            <input
+                (change)="onFileChange($event, 2)"
+                type="file"
+                id="revocationCertificate"
+                formControlName="revocationCertificate"
+                class="form-control custom-file-input">
+            <label
+                #revocationCertificate
+                class="custom-file-label"
+                for="revocationCertificate">Choose file</label>
+        </div>
+        <small class="form-text text-muted">This file is optional.</small>
+    </div>
+
+    
+    <!-- <div class="form-group">
+        <div [className]="creating ? 'progress' : 'progress invisible'" id="progressBar">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75"
+                aria-valuemin="0" aria-valuemax="100" style="width: 100%">Creating key..</div>
+        </div>
+    </div> -->
+
+    <button class="form-control btn btn-primary" type="submit">Import key</button>
+    <br><br>
+</form>

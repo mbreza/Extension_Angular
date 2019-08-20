@@ -3,6 +3,7 @@ import { browser } from "webextension-polyfill-ts";
 import { User } from '../shared/user.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from '../shared/user.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-popup',
@@ -35,13 +36,17 @@ export class PopupComponent implements OnInit {
       this.logInStatus = response.signInType;
       this.currentUser = response.currentUser;
     });
-//////Tylko dla testów
+    //////Tylko dla testów
     this.userService.generateMessage('Test message').then((result) => {
       console.log(result);
     })
 
     browser.storage.local.get(['userList', 'currentUser']).then((res) => {
       if (res.userList !== undefined) {
+
+        // var blob = new Blob([res.currentUser.publicKey], { type: "text/plain;charset=utf-8" });
+        // saveAs(blob, "pub.pgp");
+
         var users = res.userList
         console.log(users);
         console.log(users.length);
@@ -50,7 +55,7 @@ export class PopupComponent implements OnInit {
         });
       }
     })
-//////XDDDD
+    //////XDDDD
   }
 
   onSubmit() {

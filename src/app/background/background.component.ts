@@ -18,7 +18,7 @@ export class BackgroundComponent implements OnInit {
         if(res.signInType === 'temporarilySignedIn'){
           browser.storage.local.set({ signInType: "notSignedIn" });
         }
-      })
+      });
   });
 
     browser.runtime.onMessage.addListener((message) => {

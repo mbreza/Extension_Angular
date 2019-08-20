@@ -1,56 +1,23 @@
-<form [formGroup]="createForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input
-        type="text"
-        id="username"
-        formControlName="username"
-        class="form-control">
-        <span *ngIf="createForm.get('username').invalid && createForm.get('username').touched"
-          class="help-block">
-            Field is empty or username exists.
-        </span>
+<div id="tab">
+    <ul class="nav nav-tabs nav-justified">
+        <li class="nav-item">
+            <a [className]="tabType === 'create' ? 'nav-link active' : 'nav-link'" style="cursor: pointer;" (click)="goToCreate()">Create Key</a>
+        </li>
+        <li class="nav-item">
+            <a [className]="tabType === 'generate' ? 'nav-link active' : 'nav-link'"  style="cursor: pointer;" (click)="gotToGenerate()">Import Key</a>
+        </li>
+    </ul>
+    <div *ngIf="tabType === 'create'">
+        <div class="container">
+            <div class="text-center display-1">Create Key</div>
+            <app-create-key></app-create-key>
+        </div>
     </div>
 
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input
-        type="text"
-        id="email"
-        formControlName="email"
-        class="form-control">
-        <span *ngIf="!createForm.get('email').valid && createForm.get('email').touched"
-          class="help-block">
-          Field does not match email pattern or email exists.
-        </span>
+    <div *ngIf="tabType === 'generate'">
+        <div class="container">
+            <div class="text-center display-1">Import Key</div>
+            <app-import-key></app-import-key>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          formControlName="password"
-          class="form-control">
-          <span *ngIf="!createForm.get('password').valid && createForm.get('password').touched"
-            class="help-block">
-            Field must contain at least 8 characters.
-          </span>
-      </div>
-
-      <div class="form-group">
-        <label for="confirmPassword">Confirm password</label>
-        <input
-          class="form-control"
-          type="password"
-          id="confirmPassword"
-          formControlName="confirmPassword"
-          >
-          <span *ngIf="!createForm.get('confirmPassword').valid && createForm.get('confirmPassword').touched"
-            class="help-block">
-            Field must match password.
-          </span>
-      </div>
-
-    <button class="btn btn-primary" type="submit">Sign Up</button>
-  </form>
+</div>

@@ -7,19 +7,23 @@ import { AppComponent } from './app.component';
 import { OptionsComponent } from './options/options.component';
 import { BackgroundComponent } from './background/background.component';
 import { PopupComponent } from './popup/popup.component';
+import { CreateKeyComponent } from './options/create-key/create-key.component';
+import { ImportKeyComponent } from './options/import-key/import-key.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     OptionsComponent,
     BackgroundComponent,
-    PopupComponent
+    PopupComponent,
+    CreateKeyComponent,
+    ImportKeyComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
