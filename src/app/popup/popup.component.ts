@@ -4,6 +4,7 @@ import { User } from '../shared/user.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from '../shared/user.service';
 import { saveAs } from 'file-saver';
+import { AesService } from '../shared/aes.service';
 
 @Component({
   selector: 'app-popup',
@@ -15,8 +16,13 @@ export class PopupComponent implements OnInit {
   currentUser: User;
   logInStatus: string;
   logInForm: FormGroup;
+  exportForm: FormGroup;
+  CryptoJS = require("crypto-js");
+  JSZip = require("jszip");
 
-  constructor(private userService: UserService) { }
+  constructor(
+    private userService: UserService,
+    private aesService: AesService) { }
 
   ngOnInit() {
     this.logInForm = new FormGroup({
@@ -26,6 +32,9 @@ export class PopupComponent implements OnInit {
     });
     this.logInForm.patchValue({
       'checkbox': true
+    });
+    this.exportForm = new FormGroup({
+      'password': new FormControl(null, [Validators.required])
     });
 
     browser.runtime.sendMessage({
@@ -43,10 +52,6 @@ export class PopupComponent implements OnInit {
 
     browser.storage.local.get(['userList', 'currentUser']).then((res) => {
       if (res.userList !== undefined) {
-
-        // var blob = new Blob([res.currentUser.publicKey], { type: "text/plain;charset=utf-8" });
-        // saveAs(blob, "pub.pgp");
-
         var users = res.userList
         console.log(users);
         console.log(users.length);
@@ -73,5 +78,33 @@ export class PopupComponent implements OnInit {
     this.userService.signOut().then((response) => {
       this.logInStatus = response;
     });
+  }
+
+  exportKeys() {
+    var iv = this.CryptoJS.lib.WordArray.random(128 / 8).toString(this.CryptoJS.enc.Hex);
+    var salt = this.CryptoJS.lib.WordArray.random(128 / 8).toString(this.CryptoJS.enc.Hex);
+    this.aesService.setValues(128, 10000);
+
+    var publicKey = this.aesService.encrypt(
+      salt,
+      iv,
+      this.exportForm.controls.password.value,
+      this.currentUser.publicKey);
+      
+    var privateKey = this.aesService.encrypt(
+      salt,
+      iv,
+      this.exportForm.controls.password.value,
+      this.currentUser.privateKey);
+
+    var zip = new this.JSZip();
+    zip.file("privateKey.pgp", privateKey);
+    zip.file("publicKey.pgp", publicKey);
+    zip.file("salt.txt", salt);
+    zip.file("iv.txt", iv);
+    zip.generateAsync({ type: "blob" }).then((content) => {
+      saveAs(content, "encryptedKeys.zip");
+    });
+    this.exportForm.reset();
   }
 }

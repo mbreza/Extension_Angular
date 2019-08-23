@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ValidatorService } from 'src/app/shared/validator.service';
 import { UserService } from 'src/app/shared/user.service';
+import { AesService } from 'src/app/shared/aes.service';
 
 @Component({
   selector: 'app-import-key',
@@ -10,23 +11,23 @@ import { UserService } from 'src/app/shared/user.service';
 })
 export class ImportKeyComponent implements OnInit {
 
+  @ViewChild('keys', { static: false })
+  keys: ElementRef;
 
-  @ViewChild('revocationCertificate', { static: false })
-  revocationCertificate: ElementRef;
+  privateKey: string;
+  publicKey: string
+  iv: string;
+  salt: string;
 
-  @ViewChild('privateKey', { static: false })
-  privateKey: ElementRef;
-
-  @ViewChild('publicKey', { static: false })
-  publicKey: ElementRef;
-
-  labelList: ElementRef[];
-  fileList: string[] | ArrayBuffer[] = [null, null, null];
   importForm: FormGroup;
+
+  JSZip = require("jszip");
+  CryptoJS = require("crypto-js");
 
   constructor(
     private validatorService: ValidatorService,
-    private userService: UserService) { }
+    private userService: UserService,
+    private aesService: AesService) { }
 
   ngOnInit() {
     this.importForm = new FormGroup({
@@ -34,28 +35,45 @@ export class ImportKeyComponent implements OnInit {
       'email': new FormControl(null, [Validators.required, Validators.email], [this.validatorService.checkExists("email")]),
       'password': new FormControl(null, [Validators.required, Validators.minLength(8)]),
       'confirmPassword': new FormControl(null, [Validators.required]),
-      'publicKey': new FormControl(null, [Validators.required]),
-      'privateKey': new FormControl(null, [Validators.required]),
-      'revocationCertificate': new FormControl(null, [])
+      'keys': new FormControl(null, [Validators.required]),
+      'aesPassword': new FormControl(null, [Validators.required])
     },
       this.validatorService.mustMatch
     );
   }
 
   onFileChange(event, index: number) {
-    this.labelList = [this.publicKey, this.privateKey, this.revocationCertificate];
     const forLabel: FileList = event.target.files;
-    this.labelList[index].nativeElement.innerText = Array.from(forLabel)
+    this.keys.nativeElement.innerText = Array.from(forLabel)
       .map(f => f.name)
       .join(', ');
 
     if (event.target.files && event.target.files.length) {
       let reader = new FileReader();
       const [file] = event.target.files;
-      reader.readAsText(file);
-      reader.onload = () => {
-        this.fileList[index] = reader.result;
-      };
+
+      this.JSZip.loadAsync(file).then((zip) => {
+        Object.keys(zip.files).forEach((filename) => {
+          zip.files[filename].async('string').then((fileData) => {
+            switch (filename) {
+              case 'privateKey.pgp':
+                this.privateKey = fileData;
+                break;
+              case 'publicKey.pgp':
+                this.publicKey = fileData;
+                break;
+              case 'salt.txt':
+                this.salt = fileData;
+                break;
+              case 'iv.txt':
+                this.iv = fileData;
+                break;
+              default:
+                console.log('File not recognized.');
+            }
+          })
+        })
+      });
     }
   }
 
@@ -63,13 +81,29 @@ export class ImportKeyComponent implements OnInit {
     console.log('cos sie dzieje');
     if (this.importForm.valid) {
       console.log(this.importForm);
+      this.aesService.setValues(128, 10000);
+      this.privateKey = this.aesService.decrypt(
+        this.salt,
+        this.iv,
+        this.importForm.controls.aesPassword.value,
+        this.privateKey)
+
+      this.publicKey = this.aesService.decrypt(
+        this.salt,
+        this.iv,
+        this.importForm.controls.aesPassword.value,
+        this.publicKey)
+
+      console.log(this.privateKey);
+      console.log(this.publicKey);
+
       this.userService.importKey(
         this.importForm.controls.username.value,
         this.importForm.controls.email.value,
         this.importForm.controls.password.value,
-        this.fileList[0].toString(),
-        this.fileList[1].toString(),
-        this.fileList[2] === null ? null : this.fileList[2].toString()
+        this.privateKey,
+        this.publicKey,
+        null
       )
       this.importForm.reset();
     }

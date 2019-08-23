@@ -34,61 +34,32 @@
 
 
     <div class="form-group">
-        <label for="publicKey">Public key</label>
+        <label for="keys">Zipped keys</label>
         <div class="custom-file">
             <input
                 (change)="onFileChange($event, 0)"
                 type="file"
-                id="publicKey"
-                formControlName="publicKey"
+                id="keys"
+                formControlName="keys"
                 class="form-control custom-file-input">
             <label
-                #publicKey
+                #keys
                 class="custom-file-label"
-                for="publicKey">Choose file</label>
+                for="keys">Choose file</label>
         </div>
-        <span *ngIf="!importForm.get('publicKey').valid && importForm.get('publicKey').touched" class="help-block">
-            Public key must be provided.
+        <span *ngIf="!importForm.get('keys').valid && importForm.get('keys').touched" class="help-block">
+            Keys must be provided.
         </span>
     </div>
 
     <div class="form-group">
-        <label for="privateKey">Private key</label>
-        <div class="custom-file">
-            <input 
-                (change)="onFileChange($event, 1)"
-                type="file"
-                id="privateKey"
-                formControlName="privateKey"
-                class="form-control custom-file-input">
-            <label
-                #privateKey
-                class="custom-file-label"
-                for="privateKey">Choose file</label>
-        </div>
-        <span *ngIf="!importForm.get('privateKey').valid && importForm.get('privateKey').touched" class="help-block">
-            Private key must be provided.
+        <label for="aesPassword">AES password</label>
+        <input class="form-control" type="password" id="aesPassword" formControlName="aesPassword">
+        <span *ngIf="!importForm.get('aesPassword').valid && importForm.get('aesPassword').touched"
+            class="help-block">
+            Field is empty.
         </span>
     </div>
-
-    <div class="form-group">
-        <label for="revocationCertificate">Revocation certificate</label>
-        <div class="custom-file">
-            <input
-                (change)="onFileChange($event, 2)"
-                type="file"
-                id="revocationCertificate"
-                formControlName="revocationCertificate"
-                class="form-control custom-file-input">
-            <label
-                #revocationCertificate
-                class="custom-file-label"
-                for="revocationCertificate">Choose file</label>
-        </div>
-        <small class="form-text text-muted">This file is optional.</small>
-    </div>
-
-    
     <!-- <div class="form-group">
         <div [className]="creating ? 'progress' : 'progress invisible'" id="progressBar">
             <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75"

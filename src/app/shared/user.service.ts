@@ -33,7 +33,7 @@ export class UserService {
       return new Promise((resolve) => {
         var options = {
           userIds: [{ name: username, email: email }],
-          numBits: 4096,
+          numBits: 2048,
           passphrase: password
         };
         this.openpgp.generateKey(options).then((key: { privateKeyArmored: string; publicKeyArmored: string; revocationCertificate: string; }) => {
