@@ -46,9 +46,9 @@ export class PopupComponent implements OnInit {
       this.currentUser = response.currentUser;
     });
     //////Tylko dla testów
-    this.userService.generateMessage('Test message').then((result) => {
-      console.log(result);
-    })
+    // this.userService.generateMessage('Test message').then((result) => {
+    //   console.log(result);
+    // })
 
     browser.storage.local.get(['userList', 'currentUser']).then((res) => {
       if (res.userList !== undefined) {

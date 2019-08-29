@@ -20,7 +20,7 @@
   
     "content_scripts":[
       {
-          "matches": ["file:///D:/vs_workspace/text2.html"],
+          "matches": ["https://83.0.171.108:8443/web/chat"],
           "js": [
             "browser-polyfill.min.js",
             "jquery-3.3.1.min.js",

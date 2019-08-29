@@ -11,7 +11,7 @@ export class UserService {
 
   constructor() { }
 
-  importKey(username: string, email: string, password: string, privateKey: string, publicKey: string, revocationCertificate: string): Promise<any>{
+  importKey(username: string, email: string, password: string, privateKey: string, publicKey: string, revocationCertificate: string): Promise<any> {
     return browser.storage.local.get({ 'userList': [] }).then((res) => {
       return new Promise((resolve) => {
         var user = new User(
@@ -88,15 +88,17 @@ export class UserService {
     })
   }
 
-  generateMessage(message: String): Promise<any> {
+  encryptMessage(message: String, publicKey: String): Promise<any> {
     return browser.storage.local.get(['userList', 'currentUser']).then((res) => {
       return new Promise(async (resolve) => {
         if (res.currentUser !== undefined) {
+
           const privKeyObj = (await this.openpgp.key.readArmored(res.currentUser.privateKey)).keys[0]
           await privKeyObj.decrypt(res.currentUser.password);
+
           const options = {
             message: this.openpgp.message.fromText(message),
-            publicKeys: (await this.openpgp.key.readArmored(res.currentUser.publicKey)).keys,
+            publicKeys: (await this.openpgp.key.readArmored(publicKey)).keys,
             privateKeys: [privKeyObj]
           }
           this.openpgp.encrypt(options).then((ciphertext) => {
@@ -106,6 +108,29 @@ export class UserService {
           resolve('Not logged in!');
         }
       })
-    })
+    });
+  }
+
+  decryptMessage(message: String, publicKey) {
+    return browser.storage.local.get(['userList', 'currentUser']).then((res) => {
+      return new Promise(async (resolve) => {
+        if (res.currentUser !== undefined) {
+
+          const privateKey = (await this.openpgp.key.readArmored(res.currentUser.privateKey)).keys[0]
+          await privateKey.decrypt(res.currentUser.password)
+
+          const options = {
+            message: await this.openpgp.message.readArmored(message),
+            publicKeys: (await this.openpgp.key.readArmored(publicKey)).keys,
+            privateKeys: [privateKey]
+          }
+          this.openpgp.decrypt(options).then(plaintext => {
+            resolve(plaintext.data);
+          })
+        } else {
+          resolve('Not logged in!');
+        }
+      })
+    });
   }
 }

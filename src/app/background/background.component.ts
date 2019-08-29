@@ -43,6 +43,14 @@ export class BackgroundComponent implements OnInit {
             });
         } else if (message.type === 'signOut') {
           sessionStorage.removeItem("currentUser");
+        } else if (message.type === 'encrypt') {
+          this.userService.encryptMessage(message.content, message.key).then((res) => {
+            resolve({encryptedMessage: res});
+          });
+        } else if(message.type === 'decrypt'){
+          this.userService.decryptMessage(message.content, message.key).then((res) => {
+            resolve({decryptedMessage: res});
+          })
         } else {
           resolve("Nie rozumiem.");
         }
