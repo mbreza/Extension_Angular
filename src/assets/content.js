@@ -29,6 +29,7 @@ function decrypt(){
     if (res.signInType == 'notSignedIn') {
       alert('You need to sign in to addon.')
     } else {
+      console.log(res.decryptedMessage);
       window.postMessage({
         type: 'decrypted'.toString(),
         message: res.decryptedMessage
