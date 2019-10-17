@@ -40,11 +40,11 @@ export class PopupComponent implements OnInit {
     browser.runtime.sendMessage({
       type: "currentSignIn"
     }).then((response) => {
-      console.log(response.signInType);
-      console.log(response.currentUser);
       this.logInStatus = response.signInType;
       this.currentUser = response.currentUser;
     });
+
+    
     //////Tylko dla testów
     // this.userService.generateMessage('Test message').then((result) => {
     //   console.log(result);

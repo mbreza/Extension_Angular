@@ -1,44 +1,44 @@
 {
-    "manifest_version": 2,
-    "version": "0.0.1",
-    "name": "Communicator Extension",
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-    
-    "icons": {
-      "128": "128.png"
-    },
+  "manifest_version": 2,
+  "version": "0.0.1",
+  "name": "Communicator Extension",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  
+  "icons": {
+    "128": "128.png"
+  },
 
-    "browser_action":{
-      "default_popup": "/index.html",
-      "default_icon": "icon-34.png"
-    },
-  
-    "background": {
-      "page": "index.html?page=background",
-      "persistent": true
-    },
-  
-    "content_scripts":[
-      {
-          "matches": ["https://83.0.171.108:8443/web/chat"],
-          "js": [
-            "browser-polyfill.min.js",
-            "jquery-3.3.1.min.js",
-            "openpgp.min.js",
-            "content.js"
-          ]
-      }
-    ],
-  
-    "options_ui": {
-      "page": "/index.html?page=options",
-      "open_in_tab": true
-    },  
-    "permissions": [
-        "storage",
-        "notifications",
-        "contextMenus",
-        "tabs",
-        "file:///home/mbreza/vs-workspace/text.html"
-    ]
+  "browser_action":{
+    "default_popup": "/index.html",
+    "default_icon": "icon-34.png"
+  },
+
+  "background": {
+    "page": "index.html?page=background",
+    "persistent": true
+  },
+
+  "content_scripts":[
+    {
+        "matches": ["https://localhost:8443/web/chat"],
+        "js": [
+          "browser-polyfill.min.js",
+          "jquery-3.3.1.min.js",
+          "openpgp.min.js",
+          "content.js"
+        ]
+    }
+  ],
+
+  "options_ui": {
+    "page": "/index.html?page=options",
+    "open_in_tab": true
+  },  
+  "permissions": [
+      "storage",
+      "notifications",
+      "contextMenus",
+      "tabs",
+      "file:///home/mbreza/vs-workspace/text.html"
+  ]
 }

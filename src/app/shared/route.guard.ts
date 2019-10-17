@@ -13,12 +13,10 @@ export class RouteGuard implements CanActivate {
   : boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
 
     const page = route.queryParams['page'];
-
     if(!page){
       this.router.navigate(['/popup']);
       return true;
     }
-
     this.router.navigate(['/' + page]);
     return true;  
   }
