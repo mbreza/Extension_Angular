@@ -78,7 +78,6 @@ export class ImportKeyComponent implements OnInit {
   }
 
   importKey() {
-    console.log('cos sie dzieje');
     if (this.importForm.valid) {
       console.log(this.importForm);
       this.aesService.setValues(128, 10000);
@@ -93,9 +92,6 @@ export class ImportKeyComponent implements OnInit {
         this.iv,
         this.importForm.controls.aesPassword.value,
         this.publicKey)
-
-      console.log(this.privateKey);
-      console.log(this.publicKey);
 
       this.userService.importKey(
         this.importForm.controls.username.value,

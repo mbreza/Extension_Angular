@@ -8,6 +8,9 @@
     <div class="form-group">
       <label for="password">Password</label>
       <input type="password" id="password" formControlName="password" class="form-control">
+      <span *ngIf="loginAttempt" class="help-block">
+        Wrong username or password.
+      </span>
     </div>
 
     <div class="form-check">

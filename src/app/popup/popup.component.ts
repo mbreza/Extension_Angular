@@ -13,6 +13,7 @@ import { AesService } from '../shared/aes.service';
 })
 export class PopupComponent implements OnInit {
 
+  loginAttempt: boolean;
   currentUser: User;
   logInStatus: string;
   logInForm: FormGroup;
@@ -40,27 +41,12 @@ export class PopupComponent implements OnInit {
     browser.runtime.sendMessage({
       type: "currentSignIn"
     }).then((response) => {
+
       this.logInStatus = response.signInType;
       this.currentUser = response.currentUser;
     });
 
-    
-    //////Tylko dla testów
-    // this.userService.generateMessage('Test message').then((result) => {
-    //   console.log(result);
-    // })
-
-    browser.storage.local.get(['userList', 'currentUser']).then((res) => {
-      if (res.userList !== undefined) {
-        var users = res.userList
-        console.log(users);
-        console.log(users.length);
-        users.forEach((user: User) => {
-          console.log(user.username);
-        });
-      }
-    })
-    //////XDDDD
+    this.loginAttempt=false;
   }
 
   onSubmit() {
@@ -69,6 +55,13 @@ export class PopupComponent implements OnInit {
       this.logInForm.controls.password.value,
       this.logInForm.controls.checkbox.value).then((response) => {
         console.log(response);
+
+        if(response.signInType === 'notSignedIn'){
+          this.loginAttempt=true;
+        } else{
+          this.loginAttempt=false;
+        }
+
         this.logInStatus = response.signInType;
         this.currentUser = response.currentUser;
       });

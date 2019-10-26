@@ -52,7 +52,7 @@ export class BackgroundComponent implements OnInit {
             resolve({decryptedMessage: res});
           })
         } else {
-          resolve("Nie rozumiem.");
+          resolve("I don't understand.");
         }
       })
     });

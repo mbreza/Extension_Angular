@@ -115,7 +115,8 @@ export class UserService {
     return browser.storage.local.get(['userList', 'currentUser']).then((res) => {
       return new Promise(async (resolve) => {
         if (res.currentUser !== undefined) {
-
+          console.log('wiadmosc do rozszyfrowania w UserService: ' + message);
+          console.log('klucz publiczny w UserService: ' + publicKey);
           const privateKey = (await this.openpgp.key.readArmored(res.currentUser.privateKey)).keys[0]
           await privateKey.decrypt(res.currentUser.password)
 
@@ -125,6 +126,7 @@ export class UserService {
             privateKeys: [privateKey]
           }
           this.openpgp.decrypt(options).then(plaintext => {
+            console.log('wiadomosc rozszyfrowana w UserService: ' + plaintext.data)
             resolve(plaintext.data);
           })
         } else {

@@ -30,7 +30,6 @@ export class CreateKeyComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('cos sie dzieje')
     if (this.createForm.valid) {
       console.log(this.createForm);
       this.creating = true;
