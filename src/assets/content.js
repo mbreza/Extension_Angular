@@ -7,7 +7,6 @@ window.addEventListener("message", function (event) {
     } else if (event.data.type == "decrypt") {
       decrypt(event.data.sender);
     } else {
-      // console.log('JESTEM W ELSE');
     }
   }
 });
@@ -20,8 +19,6 @@ function decrypt(sender) {
   for (var i = 0; i < arrayByte.length; ++i) {
     publicKey += (String.fromCharCode(arrayByte[i]));
   }
-  console.log('klucz publiczny w content.js: ' +  publicKey.replace(/^\s+|\s+$/g, ''));
-  console.log('widomosc do rozszyfrowania w content.js: ' + event.data.message.replace(/^\s+|\s+$/g, ''));
   browser.runtime.sendMessage({
     type: 'decrypt',
     key: publicKey.replace(/^\s+|\s+$/g, ''),
@@ -30,7 +27,6 @@ function decrypt(sender) {
     if (res.decryptedMessage === 'Not logged in!') {
       alert('You need to sign in to addon.')
     } else {
-       console.log('Wiadmosc rozszyfrowana w content.js: ' + res.decryptedMessage);
         window.postMessage({
           type: 'decrypted'.toString(),
           message: res.decryptedMessage,
