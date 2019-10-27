@@ -23,8 +23,6 @@
         "matches": ["https://localhost:8443/web/chat"],
         "js": [
           "browser-polyfill.min.js",
-          "jquery-3.3.1.min.js",
-          "openpgp.min.js",
           "content.js"
         ]
     }
@@ -35,10 +33,6 @@
     "open_in_tab": true
   },  
   "permissions": [
-      "storage",
-      "notifications",
-      "contextMenus",
-      "tabs",
-      "file:///home/mbreza/vs-workspace/text.html"
+      "storage"
   ]
 }
