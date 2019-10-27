@@ -44,7 +44,6 @@ function encrypt() {
   for (var i = 0; i < arrayByte.length; ++i) {
     publicKey += (String.fromCharCode(arrayByte[i]));
   }
-  console.log(publicKey);
   browser.runtime.sendMessage({
     type: 'encrypt',
     key: publicKey,
